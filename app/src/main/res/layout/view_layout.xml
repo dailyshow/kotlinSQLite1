@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/rvIdxTv"
+        style="@style/DialogEtTvStyle"/>
+
+    <TextView
+        android:id="@+id/rvTextTv"
+        style="@style/DialogEtTvStyle"/>
+
+    <TextView
+        android:id="@+id/rvIntTv"
+        style="@style/DialogEtTvStyle"/>
+
+    <TextView
+        android:id="@+id/rvFloatTv"
+        style="@style/DialogEtTvStyle"/>
+
+    <TextView
+        android:id="@+id/rvDateTv"
+        style="@style/DialogEtTvStyle"/>
+
+</LinearLayout>

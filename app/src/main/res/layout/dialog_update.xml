@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/updateIdxTv"
+        style="@style/DialogEtTvStyle"/>
+
+    <EditText
+        android:id="@+id/updateTextEt"
+        style="@style/DialogEtTvStyle"/>
+
+    <EditText
+        android:id="@+id/updateIntEt"
+        style="@style/DialogEtTvStyle"/>
+
+    <EditText
+        android:id="@+id/updateFloatEt"
+        style="@style/DialogEtTvStyle"/>
+
+    <TextView
+        android:id="@+id/updateDateTv"
+        style="@style/DialogEtTvStyle"/>
+
+</LinearLayout>

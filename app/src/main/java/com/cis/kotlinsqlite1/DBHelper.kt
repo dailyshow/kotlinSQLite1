@@ -12,7 +12,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, "Test.db", null, 2) 
     override fun onCreate(db: SQLiteDatabase?) {
         Log.d("msg", "onCreate")
 
-        var sql = "create table TestTable (" +
+        val sql = "create table TestTable (" +
                 "idx integer primary key autoincrement," +
                 "textData text not null," +
                 "intData integer not null," +

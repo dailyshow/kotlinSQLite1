@@ -3,11 +3,14 @@ package com.cis.kotlinsqlite1
 import android.content.Context
 import android.database.Cursor
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import com.cis.kotlinsqlite1.Fragment.DialogDeleteFragment
+import com.cis.kotlinsqlite1.Fragment.DialogInsertFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,71 +19,63 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         insertBtn.setOnClickListener { view ->
-            var helper = DBHelper(this)
-            var db = helper.writableDatabase
-
-            var sql = "insert into TestTable (textData, intData, floatData, dateData) values (?, ?, ?, ?)"
-
-            var sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            var date = sdf.format(Date())
-
-            var arg1 = arrayOf("문자열1", "100", "11.11", date)
-            var arg2 = arrayOf("문자열2", "200", "22.22", date)
-
-            db.execSQL(sql, arg1)
-            db.execSQL(sql, arg2)
-
-            db.close()
-
-            tv.text = "저장 완료"
+            val dialog = DialogInsertFragment()
+            dialog.isCancelable = false
+            dialog.show(supportFragmentManager, "insert")
         }
 
         selectBtn.setOnClickListener { view ->
             selectData(this)
         }
 
-        updateBtn.setOnClickListener { view ->
-            var helper = DBHelper(this)
-            var db = helper.writableDatabase
-
-            var sql = "update TestTable set textData=? where idx=?"
-            var args = arrayOf("문자열3", "1")
-
-            db.execSQL(sql, args)
-
-            db.close()
-
-            tv.text = "수정 완료"
-        }
-
         deleteBtn.setOnClickListener { view ->
-//            var helper = DBHelper(this)
-//            var db = helper.writableDatabase
-//
-//            var sql = "delete from TestTable where idx=?"
-//            var args = arrayOf("1")
-//
-//            db.execSQL(sql, args)
-//
-//            db.close()
-//
-//            tv.text = "삭제 완료"
-
-            var dialog = DialogFragment()
+            val dialog = DialogDeleteFragment()
             dialog.isCancelable = false
-            dialog.show(supportFragmentManager, "tag")
+            dialog.show(supportFragmentManager, "delete")
         }
     }
 
+    fun insertData(context: Context, str: String, num: Int, flotNum: Float) {
+        val helper = DBHelper(context)
+        val db = helper.writableDatabase
+
+        val sql = "insert into TestTable (textData, intData, floatData, dateData) values (?, ?, ?, ?)"
+
+        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:dd", Locale.getDefault())
+        val date = sdf.format(Date())
+
+        val arg1 = arrayOf(str, num, flotNum, date)
+
+        db.execSQL(sql, arg1)
+        db.close()
+
+    }
+
+    fun updateData(context: Context, textData: String, intData: String, floatData: String, idx: String) {
+        val helper = DBHelper(context)
+        val db = helper.writableDatabase
+
+        val sql = "update TestTable set textData=?, intData=?, floatData=? where idx=?"
+        val args = arrayOf(textData, intData, floatData, idx)
+
+        db.execSQL(sql, args)
+        db.close()
+
+        Toast.makeText(this, "수정 완료", Toast.LENGTH_SHORT).show()
+
+    }
+
     fun selectData(context: Context) {
-        var helper = DBHelper(context)
-        var db = helper.writableDatabase
+        val helper = DBHelper(context)
+        val db = helper.writableDatabase
 
-        var sql = "select * from TestTable"
+        val sql = "select * from TestTable"
 
-        var cursor: Cursor = db.rawQuery(sql, null)
+        val cursor: Cursor = db.rawQuery(sql, null)
 
-        tv.text = ""
+//        tv.text = ""
+        val recyclerView = mainRv
+        val list = arrayListOf<Items>()
 
         while (cursor.moveToNext()) {
             val idxPos = cursor.getColumnIndex("idx")
@@ -92,7 +87,7 @@ class MainActivity : AppCompatActivity() {
             val idx = cursor.getInt(idxPos)
             val textData = cursor.getString(textDataPos)
             val intData = cursor.getInt(intDataPos)
-            val floatData = cursor.getDouble(floatDataPos)
+            val floatData = cursor.getDouble(floatDataPos).toFloat()
             val dateData = cursor.getString(dateDataPos)
 
             /*
@@ -104,13 +99,21 @@ class MainActivity : AppCompatActivity() {
             var dateData = cursor.getString(4)
             */
 
-            tv.append("idx : ${idx}\n")
-            tv.append("textData : ${textData}\n")
-            tv.append("intData : ${intData}\n")
-            tv.append("floatData : ${floatData}\n")
-            tv.append("dateData : ${dateData}\n\n")
+//            tv.append("idx : ${idx}\n")
+//            tv.append("textData : ${textData}\n")
+//            tv.append("intData : ${intData}\n")
+//            tv.append("floatData : ${floatData}\n")
+//            tv.append("dateData : ${dateData}\n\n")
+
+            list.add(Items(idx, textData, intData, floatData, dateData))
         }
 
+        val adapter = RecyclerAdapter(this, list)
+        recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+
         db.close()
+
+        Toast.makeText(context, "값 불러오기 실행됨", Toast.LENGTH_SHORT).show()
     }
 }

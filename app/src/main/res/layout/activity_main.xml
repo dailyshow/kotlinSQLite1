@@ -27,13 +27,6 @@
             android:text="값 불러오기" />
 
         <Button
-            android:id="@+id/updateBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="값 업데이트" />
-
-        <Button
             android:id="@+id/deleteBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -41,16 +34,11 @@
             android:text="값 삭제하기" />
     </LinearLayout>
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mainRv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="textview"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-    </ScrollView>
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/view_layout"/>
 
 </LinearLayout>

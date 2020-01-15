@@ -1,4 +1,4 @@
-package com.cis.kotlinsqlite1
+package com.cis.kotlinsqlite1.Fragment
 
 import android.app.Dialog
 import android.content.DialogInterface
@@ -8,11 +8,12 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.get
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.dialog.*
+import com.cis.kotlinsqlite1.DBHelper
+import com.cis.kotlinsqlite1.MainActivity
+import com.cis.kotlinsqlite1.R
 
-class DialogFragment : DialogFragment() {
+class DialogDeleteFragment : DialogFragment() {
     var listPos = 0
     var dialogTv : TextView? = null
 
@@ -20,15 +21,16 @@ class DialogFragment : DialogFragment() {
         val view = requireActivity().layoutInflater.inflate(R.layout.dialog, null)
 
         dialogTv = view.findViewById<TextView>(R.id.dialogTv)
-        var lv = view.findViewById<ListView>(R.id.dialogLv)
 
         val dbHelper = DBHelper(requireActivity())
         val db = dbHelper.writableDatabase
         val sql = "select * from TestTable"
 
+        val lv = view.findViewById<ListView>(R.id.dialogLv)
         val list = arrayListOf<Int>()
 
-        var cursor = db.rawQuery(sql, null)
+        val cursor = db.rawQuery(sql, null)
+
         while (cursor.moveToNext()) {
             val idxPos = cursor.getColumnIndex("idx")
             val idx = cursor.getInt(idxPos)
@@ -47,7 +49,7 @@ class DialogFragment : DialogFragment() {
 
         db.close()
 
-        var listener = Listener()
+        val listener = Listener()
 
         val builder = AlertDialog.Builder(requireActivity())
         builder.setView(view)
@@ -68,19 +70,19 @@ class DialogFragment : DialogFragment() {
                     dismiss()
                 }
                 DialogInterface.BUTTON_POSITIVE -> {
-                    var pos = dialogTv?.text?.substring(0, 1)?:0
+                    val pos = dialogTv?.text?.substring(0, 1)?:0
 
-                    var dbHelper = DBHelper(requireContext())
-                    var db = dbHelper.writableDatabase
+                    val dbHelper =
+                        DBHelper(requireContext())
+                    val db = dbHelper.writableDatabase
 
-                    var sql = "delete from TestTable where idx=?"
-                    var args = arrayOf(pos)
+                    val sql = "delete from TestTable where idx=?"
+                    val args = arrayOf(pos)
 
                     Log.d("tag", "listPos : ${pos}")
                     Log.d("tag", "listPos : ${listPos}")
 
                     db.execSQL(sql, args)
-
                     db.close()
 
                     val reloadData = activity as MainActivity
